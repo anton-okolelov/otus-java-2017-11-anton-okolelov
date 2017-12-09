@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ListIterator;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
@@ -62,6 +64,43 @@ public class MyArrayListTest {
         Collections.addAll(list2, 3, 3, 3);
         Collections.copy(list2, list1);
         assertTrue(list2.contains(int2));
+    }
+
+    @Test
+    public void copy11Elements() {
+        MyArrayList<Integer> source = new MyArrayList<>();
+        MyArrayList<Integer> destination = new MyArrayList<>();
+
+        IntStream.range(1, 11).forEach(item -> {
+            source.add(item);
+            destination.add(0);
+        });
+
+        Collections.copy(destination, source);
+        source.forEach((item) -> {
+            assertTrue(destination.contains(item));
+        });
+
+    }
+
+    @Test
+    public void contains() {
+        MyArrayList<Integer> list = new MyArrayList<>();
+        list.add(1);
+        assertTrue(list.contains(1));
+        assertFalse(list.contains(2));
+    }
+
+    @Test
+    public void listIterator() {
+        MyArrayList<Integer> list = new MyArrayList<>();
+        list.add(1);
+        list.add(2);
+        ListIterator<Integer> iterator = list.listIterator();
+        assertTrue(iterator.hasNext());
+        assertFalse(iterator.hasPrevious());
+        assertEquals(new Integer(1), iterator.next());
+        assertEquals(new Integer(2), iterator.next());
     }
 
     @Test

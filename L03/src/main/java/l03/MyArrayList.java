@@ -2,7 +2,7 @@ package l03;
 
 import java.util.*;
 
-public class MyArrayList<T> extends AbstractList<T> {
+public class MyArrayList<T> implements List<T> {
 
     private final int DEFAULT_INITIAL_CAPACITY = 10;
     private int size = 0;
@@ -15,6 +15,74 @@ public class MyArrayList<T> extends AbstractList<T> {
     @Override
     public int size() {
         return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return Arrays.stream(storage).limit(size).anyMatch(item -> item.equals(o));
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return listIterator();
+    }
+
+    @Override
+    public Object[] toArray() {
+        Object[] result = new Object[size];
+        System.arraycopy(storage, 0, result, 0, size);
+        return result;
+    }
+
+    @Override
+    public <T1> T1[] toArray(T1[] a) {
+        return null;
+    }
+
+    @Override
+    public boolean add(T t) {
+        add(size, t);
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends T> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public void clear() {
+
     }
 
 
@@ -41,11 +109,10 @@ public class MyArrayList<T> extends AbstractList<T> {
 
     @Override
     public void add(int index, T element) {
-        increaseCapacityIfNeeded(index + 1);
+        increaseCapacityIfNeeded(size + 1);
+        System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = element;
-        if (index > size - 1) {
-            size++;
-        }
+        size++;
     }
 
     @Override
@@ -62,6 +129,31 @@ public class MyArrayList<T> extends AbstractList<T> {
         storage = newStorage;
         size--;
         return removedObject;
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public ListIterator<T> listIterator() {
+        return new MyArrayListIterator<>(storage, size);
+    }
+
+    @Override
+    public ListIterator<T> listIterator(int index) {
+        return null;
+    }
+
+    @Override
+    public List<T> subList(int fromIndex, int toIndex) {
+        return null;
     }
 
 }
