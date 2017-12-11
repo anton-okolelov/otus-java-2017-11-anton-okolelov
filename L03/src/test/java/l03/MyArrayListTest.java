@@ -104,6 +104,17 @@ public class MyArrayListTest {
     }
 
     @Test
+    public void ListIteratorSet() {
+        MyArrayList<Integer> list = new MyArrayList<>();
+        list.add(1);
+        list.add(2);
+        ListIterator<Integer> listIterator = list.listIterator();
+        listIterator.next();
+        listIterator.set(5);
+        assertEquals(new Integer(5), list.get(0));
+    }
+
+    @Test
     public void sort() {
         MyArrayList<Integer> list = new MyArrayList<>();
         Collections.addAll(list, 3, 1, 2);

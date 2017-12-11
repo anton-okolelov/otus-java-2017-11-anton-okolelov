@@ -34,9 +34,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public Object[] toArray() {
-        Object[] result = new Object[size];
-        System.arraycopy(storage, 0, result, 0, size);
-        return result;
+        return Arrays.copyOf(storage, size);
     }
 
     @Override
@@ -88,9 +86,7 @@ public class MyArrayList<T> implements List<T> {
 
     private void increaseCapacityIfNeeded(int requiredSize) {
         if (requiredSize > storage.length) {
-            Object[] newStorage = new Object[storage.length * 2];
-            System.arraycopy(storage, 0, newStorage, 0, storage.length);
-            storage = newStorage;
+            storage = Arrays.copyOf(storage, storage.length * 2);
         }
     }
 
@@ -154,6 +150,66 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         return null;
+    }
+
+    private class MyArrayListIterator<E> implements ListIterator<E> {
+
+        private final Object[] storage;
+        private final int size;
+        private int cursor = 0;
+        private int lastReturnedIndex;
+
+        MyArrayListIterator(Object[] storage, int size) {
+            this.size = size;
+            this.storage = storage;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor < size;
+        }
+
+        @Override
+        public E next() {
+            lastReturnedIndex = cursor;
+            return (E) storage[cursor++];
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursor > 0;
+        }
+
+        @Override
+        public E previous() {
+            lastReturnedIndex = cursor;
+            return (E) storage[cursor--];
+        }
+
+        @Override
+        public int nextIndex() {
+            return cursor;
+        }
+
+        @Override
+        public int previousIndex() {
+            return cursor - 1;
+        }
+
+        @Override
+        public void remove() {
+
+        }
+
+        @Override
+        public void set(E t) {
+            storage[lastReturnedIndex] = t;
+        }
+
+        @Override
+        public void add(E t) {
+
+        }
     }
 
 }
