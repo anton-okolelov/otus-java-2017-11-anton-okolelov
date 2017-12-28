@@ -6,20 +6,27 @@ import java.util.Random;
 
 public class App {
     public static void main(String[] args) {
-        Random random = new Random();
-        List<Integer[]> list = new ArrayList<>();
-        while (true) {
-            for (int i = 0; i < 10; i++) {
-                list.add(new Integer[500]);
-                if (random.nextBoolean()) {
-                    list.remove(random.nextInt(list.size()));
+        long count = 0;
+        try {
+            Random random = new Random();
+            List<Integer[]> list = new ArrayList<>();
+
+            while (true) {
+                for (int i = 0; i < 10; i++) {
+                    list.add(new Integer[500]);
+                    count += 500;
+                    if (random.nextBoolean()) {
+                        list.remove(random.nextInt(list.size()));
+                    }
+                }
+                try {
+                    Thread.sleep(2);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException();
                 }
             }
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException e) {
-                throw new RuntimeException();
-            }
+        } catch (OutOfMemoryError error) {
+            System.out.println(count);
         }
     }
 }
@@ -27,12 +34,22 @@ public class App {
 /*
 java -verbose:gc -XX:+UseSerialGC    -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:SerialGC.log -Xms1500m -Xmx1500m  -jar target/L04-1.0-SNAPSHOT.jar
 
+752998000 интов
+
+
 java -verbose:gc -XX:+UseParallelGC  -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:ParallelGC.log -Xms1500m -Xmx1500m  -jar target/L04-1.0-SNAPSHOT.jar
+
+713311500 интов
+
 
 java -verbose:gc -XX:+UseParNewGC    -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:ParNewGC.log -Xms1500m -Xmx1500m  -jar target/L04-1.0-SNAPSHOT.jar
 
+752174500 интов
+
+
 java -verbose:gc -XX:+UseG1GC        -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:G1GC.log -Xms1500m -Xmx1500m  -jar target/L04-1.0-SNAPSHOT.jar
 
+777752000 интов
 
 Результат обработки логов:
 ---------------------------------
@@ -84,7 +101,7 @@ Total: 41.7815186
 Выводы:
 ----------------------------------
 Все типы GC в последнюю минуту проявляют максимум активности, что логично. Для данной программы выгоднее всего оказался G1,
-так как меньше всего потрачено на сборку мусора суммарно.
+так как меньше всего потрачено на сборку мусора суммарно. И больше полезных действий выполнено
 
 */
 
