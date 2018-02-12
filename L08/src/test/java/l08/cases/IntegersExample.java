@@ -1,6 +1,6 @@
 package l08.cases;
 
-public class Integers {
+public class IntegersExample {
     public int x;
     public int y;
 }
