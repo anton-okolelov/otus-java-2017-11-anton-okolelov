@@ -20,7 +20,7 @@ public class SocketMessagesManager {
     public void sendMessage(Message message) {
         String json = gson.toJson(message);
         try {
-            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
             writer.println(json);
         } catch (IOException e) {
             throw new RuntimeException(e);

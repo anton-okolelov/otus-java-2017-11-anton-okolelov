@@ -1,10 +1,11 @@
-package l16;
+package l16.application;
 
 import l16.common.socket.SocketMessagesManager;
 import l16.frontend.WebSocketsHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
@@ -19,12 +20,12 @@ public class AppConfig {
     SocketMessagesManager socketMessagesManager() {
         try {
             Socket socket = new Socket("localhost", 8124);
-            SocketMessagesManager messageSystem = new SocketMessagesManager(socket);
+            return new SocketMessagesManager(socket);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return socketMessagesManager();
     }
 
     @Configuration

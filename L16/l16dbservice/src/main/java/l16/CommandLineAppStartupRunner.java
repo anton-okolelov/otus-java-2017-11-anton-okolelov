@@ -29,6 +29,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
         Socket socket = new Socket("localhost", port);
         SocketMessagesManager socketMessagesManager = new SocketMessagesManager(socket);
+        handler.setSocketMessagesManager(socketMessagesManager);
         socketMessagesManager.waitMessages(handler, MessageToDb.class);
     }
 

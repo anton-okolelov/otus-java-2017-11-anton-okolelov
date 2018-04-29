@@ -9,15 +9,26 @@ public class ProcessRunner {
     static Logger logger = Logger.getLogger(ProcessRunner.class.getName());
 
     public void run(String command) {
-        logger.info(command);
-        ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-        processBuilder.redirectErrorStream(true);
-        try {
-            Process process = processBuilder.start();
-            String firstLine = new BufferedReader(new InputStreamReader(process.getInputStream())).readLine();
-            logger.info(firstLine);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        new Thread(() -> {
+            logger.info(command);
+            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+            processBuilder.redirectErrorStream(true);
+            try {
+                Process process = processBuilder.start();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                while (true) {
+                    String line = reader.readLine();
+                    if (line == null) {
+                        Thread.sleep(1000);
+                    }
+                    logger.info(line);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }
